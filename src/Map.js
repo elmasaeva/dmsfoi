@@ -1,32 +1,40 @@
 import React, {Component} from 'react';
 import {ISOCODES, koatu} from './regions';
 import CI4DATA from './data/CI4_2018_05_all.json';
+import CI5DATA from './data/CI5_2018_05_all.json';
+
+import {packci4, packci5} from './parsers';
 
 function nColor(n) {
     return Number((256 * n).toFixed()).toString(16);
 }
 
-function highlightBoth(nq, marriage, terrOrigin) {
-    const g = (marriage / nq);
-    const r = (terrOrigin / nq);
+function highlightBoth(total, marriage, torig) {
+    const g = (marriage / total);
+    const r = (torig / total);
     return {g, r};
 }
 
-function highlightOne(nq, metric) {
-    return {g: (metric / nq), r: (metric / nq)};
+function highlightOne(total, metric) {
+    return {g: (metric / total), r: (metric / total)};
 }
 
-function highlightCI4(iso, highlight, selected) {
-    const region = CI4DATA[koatu(iso)];
+function query(iso, type) {
+    const region = (type === '4')
+        ? CI4DATA[koatu(iso)]
+        : CI5DATA[koatu(iso)];
     if (!region) {
-        return 'gray';
+        return {};
     }
-    const nq = region[11];
-    const marriage = region[12];
-    const terrOrigin = region[14];
+    return (type === '4') ? packci4(region) : packci5(region);
+}
+
+function highlightCI45(iso, highlightCode, selected) {
+    const highlight = highlightCode.slice(0, highlightCode.length - 1);
+    const {total, marr, torig} = query(iso, highlightCode.slice(highlightCode.length - 1));
     const {g, r} = (highlight === 'both')
-        ? highlightBoth(nq, marriage, terrOrigin)
-        : highlightOne(nq, (highlight === 'marriage') ? marriage : terrOrigin);
+        ? highlightBoth(total, marr, torig)
+        : highlightOne(total, (highlight === 'marriage') ? marr : torig);
 
     const b = selected ? '77' : '44';
     return `#${nColor(r)}${nColor(g)}${b}`;
@@ -46,7 +54,7 @@ class Region extends Component {
             data-iso={iso}
             title={region.title}
             d={region.shape}
-            fill={highlightCI4(iso, highlight, selected)}
+            fill={highlightCI45(iso, highlight, selected)}
             {...props}
             onClick={this.handleClick} />);
     }

@@ -5,6 +5,8 @@ import {ISOCODES, koatu} from './regions';
 import CI4DATA from './data/CI4_2018_05_all.json';
 import CI5DATA from './data/CI5_2018_05_all.json';
 
+import {packci4, packci5} from './parsers';
+
 function padTh(num) {
     let ret = num.toString();
     while(ret.length < 3) {
@@ -58,36 +60,7 @@ const CI45_COLS = [
     ['recalledPr', 'Вилучено посвідок на постійне проживання'],
 ];
 
-function packci4(ci4) {
-    const [
-        ,total,,
-        cul, spec, inv, sibl, ren, immsibl, ref, vict,
-        ,
-        marr, guard, torig, stint, zak, trans, st416,
-    ] = ci4;
 
-    return {total, cul, spec, inv, sibl, ren, immsibl, ref, vict,
-        marr, guard, torig, stint, zak, trans, st416};
-}
-
-function packci5(ci5) {
-    const [
-        ,,,
-        refused, total,
-        cul, spec, inv, sibl, ren, immsibl, vict,
-        marr, guard, torig, stint, zak,
-        pr,newpr,replacepr,
-        trans, st416,
-        refusedPr,
-        recalled, rcit,  remigr, rother,
-        recalledPr,
-    ] = ci5;
-
-    return {refused, total, cul, spec, inv, sibl, ren, immsibl, vict,
-        marr, guard, torig, stint, zak, trans, st416,
-        pr, newpr, replacepr, refusedPr, recalled, rcit, remigr, rother,
-        recalledPr};
-}
 
 class CI45 extends Component {
     render() {
@@ -145,7 +118,7 @@ const STYLE_DEFAULT = {
 export class MapData extends Component {
     state = {
         selected: null,
-        highlight: 'both',
+        highlight: 'both4',
     };
 
     handleSelect = (iso)=> {
@@ -153,7 +126,7 @@ export class MapData extends Component {
     };
 
     handleHighlight = (event)=> {
-        this.setState({highlight: event.target.name});
+        this.setState({highlight: event.target.name || 'both4'});
     };
 
     renderHighlight(buttons) {
@@ -177,9 +150,13 @@ export class MapData extends Component {
                 <h3>Highlight</h3>
                 {this.renderHighlight(
                     <div onClick={this.handleHighlight}>
-                        <button name="marriage">Immigration by marriage</button>
-                        <button name="origin">Immigration by origin</button>
-                        <button name="both">Both</button>
+                        <button name="marriage4">Immigration by marriage</button>
+                        <button name="origin4">Immigration by origin</button>
+                        <button name="both4">Both</button>
+                        <br/>
+                        <button name="marriage5">Immigration by marriage last moth</button>
+                        <button name="origin5">Immigration by origin last month</button>
+                        <button name="both5">Both last month</button>
                     </div>
                 )}
             </div>
