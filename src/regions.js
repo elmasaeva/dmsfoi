@@ -1,3 +1,17 @@
+const KOATU_OVERRIDE = {
+    '43': '01', // АР Крим використовує 43 (код КОАТУУ — 01)
+    '09': '44', // Луганська область використовує 09 (код КОАТУУ — 44)
+    '77': '73', // Чернівецька область використовує 77 (код КОАТУУ — 73)
+    '30': '80', // місто Київ використовує 30 (код КОАТУУ — 80)
+    '40': '85', // місто Севастополь використовує 40 (код КОАТУУ — 85)
+};
+
+export function koatu(iso) {
+    if (iso === 'total') { return iso; }
+    const isoN = iso.substr(3);
+    const region = KOATU_OVERRIDE[isoN] || isoN;
+    return `${region}01`;
+}
 
 function region(title, shape) {
     return {title, shape};
