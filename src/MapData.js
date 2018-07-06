@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, cloneElement } from 'react';
 import {Map} from './Map';
 import {ISOCODES, koatu} from './regions';
 import CI4DATA from './data/CI4_2018_05_all.json';
@@ -135,19 +135,57 @@ class Selected extends Component {
     }
 }
 
+const STYLE_HIGHLIGHT = {
+    border: '2px solid yellow',
+    padding: 5,
+    margin: 7,
+};
+const STYLE_DEFAULT = {
+    ...STYLE_HIGHLIGHT,
+    border: '2px solid #4CAF50',
+};
+
 export class MapData extends Component {
     state = {
         selected: null,
+        highlight: 'both',
     };
 
     handleSelect = (iso)=> {
         this.setState({selected: iso});
     };
 
+    handleHighlight = (event)=> {
+        this.setState({highlight: event.target.name});
+    };
+
+    renderHighlight(buttons) {
+        const {highlight} = this.state;
+        return cloneElement(buttons, buttons.props, buttons.props.children.map(
+            (button)=> cloneElement(button, {
+                ...button.props,
+                key: button.props.name,
+                style: (button.props.name === highlight)
+                    ? STYLE_HIGHLIGHT
+                    : STYLE_DEFAULT
+            }))
+        );
+    }
+
     render() {
-        const {selected} = this.state;
+        const {selected, highlight} = this.state;
         return (<div style={CONTAINER}>
-            <Map highlight={selected} onSelect={this.handleSelect} />
+            <div>
+                <Map selected={selected} highlight={highlight} onSelect={this.handleSelect} />
+                <h3>Highlight</h3>
+                {this.renderHighlight(
+                    <div onClick={this.handleHighlight}>
+                        <button name="marriage">Immigration by marriage</button>
+                        <button name="origin">Immigration by origin</button>
+                        <button name="both">Both</button>
+                    </div>
+                )}
+            </div>
             <div>
                 <Selected iso={selected || 'total'} />
             </div>
