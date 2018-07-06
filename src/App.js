@@ -1,0 +1,15 @@
+import React, { Component } from 'react';
+import {MapData} from './MapData';
+
+class App extends Component {
+  render() {
+    return (
+      <div className="map">
+        <h1>Statistics by region</h1>
+        <MapData />
+      </div>
+    );
+  }
+}
+
+export default App;
