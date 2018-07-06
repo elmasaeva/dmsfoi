@@ -130,16 +130,17 @@ class Selected extends Component {
         }
 
         return (<div>
-            {iso} {koatu(iso)} {region.title}
+            <h2>{region.title}</h2>
+            ISO:{iso} КОАТУ:{koatu(iso)}
 
             <section>
                 <div>
-                    <h2>CI4</h2>
+                    <h2>Інформація  про кількість іммігрантів, які перебувають на обліку</h2>
                     {ci4 && (<CI4 line={ci4} />)}
                 </div>
 
                 <div>
-                    <h2>CI5</h2>
+                    <h2>Інформація про кількість виданих дозволів на імміграцію та посвідок на постійне проживання</h2>
                     {ci5 && (<CI5 line={ci5} />)}
                 </div>
             </section>
@@ -161,7 +162,6 @@ export class MapData extends Component {
         return (<div style={CONTAINER}>
             <Map highlight={selected} onSelect={this.handleSelect} />
             <div>
-                <h2>Selected</h2>
                 {selected && (<Selected iso={selected} />)}
             </div>
         </div>);

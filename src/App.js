@@ -5,7 +5,7 @@ class App extends Component {
   render() {
     return (
       <div className="map">
-        <h1>Statistics by region</h1>
+        <h1>Immigration statistics by region (May 2018)</h1>
         <MapData />
       </div>
     );
