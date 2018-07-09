@@ -104,6 +104,11 @@ class Selected extends Component {
                 Постійне: {formatNum(population.ondateP)}
                 <br/>
                 Іммігрантів на 1000 населення: {((1000 * ci4.total) / population.average).toFixed(2)}
+                <br/>
+                Іммігрантів у травні на 100 000 населення: {((100000 * ci5.total) / population.average).toFixed(2)}
+                <br/>
+                Іммігрантів у травні на 100 іммігрантів: {((1000 * ci5.total) / ci4.total).toFixed(2)}
+
                 <h2>Інформація  про кількість іммігрантів, які перебувають на обліку</h2>
                 <CI45 ci4={ci4} ci5={ci5} />
             </section>
@@ -164,7 +169,9 @@ export class MapData extends Component {
                         <button name="origin5">Immigration by origin last month</button>
                         <button name="both5">Both last month</button>
                         <br key={1} />
-                        <button name="ipercent">Immigrants to population</button>
+                        <button name="ipercent4">Immigrants to population</button>
+                        <button name="ipercent5">New immigrants to population</button>
+                        <button name="ipercentnew">New immigrants to immigrants</button>
                     </div>
                 )}
             </div>

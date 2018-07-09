@@ -29,25 +29,43 @@ function query(iso, type) {
     return region || {};
 }
 
-function highlightPercent(iso, selected) {
-    const region = CI4DATA[koatu(iso)];
-    if(!region) {
+function highlightNewPercent(iso, selected) {
+    const ci4 = CI4DATA[koatu(iso)];
+    const ci5 = CI5DATA[koatu(iso)];
+
+    if(!ci4 || !ci5) {
         return 'gray';
     }
-    const population = POPULATION[koatu(iso)];
-    const g = (region.total / population.average) * 77;
+    const g = (ci5.total / ci4.total) * 87;
     const r = 1 - g;
     const b = selected ? '77' : '44';
     return `#${nColor(r)}${nColor(g)}${b}`;
+}
 
+function highlightPercent(iso, code, selected) {
+    const region = query(iso, code);
+    const population = POPULATION[koatu(iso)];
+    if(!region || !population) {
+        return 'gray';
+    }
+    const g = (region.total / population.average) * ((code === '4') ? 77 : 10000);
+    const r = 1 - g;
+    const b = selected ? '77' : '44';
+    return `#${nColor(r)}${nColor(g)}${b}`;
 }
 
 function highlightCI45(iso, highlightCode, selected) {
-    if (highlightCode === 'ipercent') {
-        return highlightPercent(iso, selected);
-    }
+    const code = highlightCode.slice(highlightCode.length - 1);
     const highlight = highlightCode.slice(0, highlightCode.length - 1);
-    const {total, marr, torig} = query(iso, highlightCode.slice(highlightCode.length - 1));
+    if (highlight === 'ipercent') {
+        return highlightPercent(iso, code, selected);
+    }
+    if (highlightCode === 'ipercentnew') {
+        return highlightNewPercent(iso, selected);
+    }
+
+
+    const {total, marr, torig} = query(iso, code);
     const {g, r} = (highlight === 'both')
         ? highlightBoth(total, marr, torig)
         : highlightOne(total, (highlight === 'marriage') ? marr : torig);
