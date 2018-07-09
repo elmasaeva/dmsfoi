@@ -4,8 +4,8 @@ import './MapData.css'
 import {ISOCODES, koatu} from './regions';
 import CI4DATA from './data/CI4_2018_05_all.json';
 import CI5DATA from './data/CI5_2018_05_all.json';
+import POPULATION from './data/population_2018_05.json';
 
-import {packci4, packci5} from './parsers';
 
 function padTh(num) {
     let ret = num.toString();
@@ -64,8 +64,7 @@ const CI45_COLS = [
 
 class CI45 extends Component {
     render() {
-        const ci4 = packci4(this.props.ci4);
-        const ci5 = packci5(this.props.ci5);
+        const {ci4, ci5} = this.props;
 
         return (<table>
             <thead>
@@ -88,6 +87,7 @@ class Selected extends Component {
         const region = ISOCODES[iso];
         const ci4 = CI4DATA[koatu(iso)];
         const ci5 = CI5DATA[koatu(iso)];
+        const population = POPULATION[koatu(iso)];
 
         if (!ci4 && !ci5) {
             return (<div>No Data</div>);
@@ -98,6 +98,12 @@ class Selected extends Component {
             {region ? (<span>ISO:{iso} КОАТУ:{koatu(iso)}</span>) : (<span>--</span>)}
 
             <section>
+                <h2>Чисельність населення (за оцінкою)</h2>
+                Наявне: {formatNum(population.ondate)}
+                <br/>
+                Постійне: {formatNum(population.ondateP)}
+                <br/>
+                Іммігрантів на 1000 населення: {((1000 * ci4.total) / population.average).toFixed(2)}
                 <h2>Інформація  про кількість іммігрантів, які перебувають на обліку</h2>
                 <CI45 ci4={ci4} ci5={ci5} />
             </section>
@@ -157,6 +163,8 @@ export class MapData extends Component {
                         <button name="marriage5">Immigration by marriage last moth</button>
                         <button name="origin5">Immigration by origin last month</button>
                         <button name="both5">Both last month</button>
+                        <br key={1} />
+                        <button name="ipercent">Immigrants to population</button>
                     </div>
                 )}
             </div>

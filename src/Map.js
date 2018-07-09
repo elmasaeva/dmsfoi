@@ -2,11 +2,14 @@ import React, {Component} from 'react';
 import {ISOCODES, koatu} from './regions';
 import CI4DATA from './data/CI4_2018_05_all.json';
 import CI5DATA from './data/CI5_2018_05_all.json';
+import POPULATION from './data/population_2018_05.json';
 
-import {packci4, packci5} from './parsers';
+function pad(num) {
+    return num.length === 2 ? num : '0' + num;
+}
 
 function nColor(n) {
-    return Number((256 * n).toFixed()).toString(16);
+    return pad(Number((256 * n).toFixed()).toString(16));
 }
 
 function highlightBoth(total, marriage, torig) {
@@ -23,13 +26,26 @@ function query(iso, type) {
     const region = (type === '4')
         ? CI4DATA[koatu(iso)]
         : CI5DATA[koatu(iso)];
-    if (!region) {
-        return {};
+    return region || {};
+}
+
+function highlightPercent(iso, selected) {
+    const region = CI4DATA[koatu(iso)];
+    if(!region) {
+        return 'gray';
     }
-    return (type === '4') ? packci4(region) : packci5(region);
+    const population = POPULATION[koatu(iso)];
+    const g = (region.total / population.average) * 77;
+    const r = 1 - g;
+    const b = selected ? '77' : '44';
+    return `#${nColor(r)}${nColor(g)}${b}`;
+
 }
 
 function highlightCI45(iso, highlightCode, selected) {
+    if (highlightCode === 'ipercent') {
+        return highlightPercent(iso, selected);
+    }
     const highlight = highlightCode.slice(0, highlightCode.length - 1);
     const {total, marr, torig} = query(iso, highlightCode.slice(highlightCode.length - 1));
     const {g, r} = (highlight === 'both')
