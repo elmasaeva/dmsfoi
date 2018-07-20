@@ -1,6 +1,7 @@
 import compareAsc from 'date-fns/compare_asc';
 import React, { Component } from 'react';
 import F52UA51 from './data/F52_UA51_2017.json';
+import {code, flag} from './flags';
 import './Form52.css';
 
 function nform(n, form0, form1, form2) {
@@ -57,12 +58,12 @@ function Row({line, full}) {
     return (<tr>
         <td>—</td>
         {full && <td colSpan={3} />}
-        <td>{fcit}</td>
+        <td className="left">{flag(code(fcit))}&nbsp;{fcit}</td>
         {full && <td colSpan={2} />}
         <td>{sdate}</td>
         {full && <td />}
         <td>{reason}</td>
-        <td>{dnum} {edate || '—'}</td>
+        <td className="right">{dnum} {edate || '—'}</td>
     </tr>);
 }
 
@@ -163,6 +164,17 @@ export class Form52 extends Component {
             <h3>{iso}</h3>
 
             {this.renderTable(lines, full)}
+
+            <footer>
+            * підстави для прийняття до громадянства:<br/>
+            шлюб - на підставі шлюбу з громадяднином України більше двох років;
+            <br/>
+            біж. - на підставі проживання в Україні більше трьох років в статусі біженця;
+            <br/>
+            5р - на підставі проживання в Україні більше п'яти років після імміграції (отримання посвідки на постійне проживання);
+            <br/>
+            3р - на підставі проживання в Україні більше трьох років після імміграції (для осіб без громадянства).
+            </footer>
 
     </div>);
     }
