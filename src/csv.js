@@ -26,10 +26,22 @@ function process(input, output, fn) {
     fs.writeFileSync(output, JSON.stringify(out));
 }
 
+function process52(input, output) {
+    const data = fs
+        .readFileSync(input)
+        .toString()
+        .split('\n')
+        .filter((line)=> line)
+        .map((line)=> line.split(','));
+
+    fs.writeFileSync(output, JSON.stringify(data));
+}
+
 function main() {
     process('./src/data/CI5_2018_05_all.csv', './src/data/CI5_2018_05_all.json', packci5);
     process('./src/data/CI4_2018_05_all.csv', './src/data/CI4_2018_05_all.json', packci4);
     process('./src/data/population_2018_05.csv', './src/data/population_2018_05.json', population);
+    process52('./src/data/F52_UA51_2017.csv', './src/data/F52_UA51_2017.json');
 }
 
 main()

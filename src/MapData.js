@@ -1,5 +1,6 @@
 import React, { Component, cloneElement } from 'react';
 import {Map} from './Map';
+import {Form52} from './Form52';
 import './MapData.css'
 import {ISOCODES, koatu} from './regions';
 import CI4DATA from './data/CI4_2018_05_all.json';
@@ -155,7 +156,7 @@ export class MapData extends Component {
 
     render() {
         const {selected, highlight} = this.state;
-        return (<div className="mapdata">
+        return (<div><div className="mapdata">
             <div>
                 <Map selected={selected} highlight={highlight} onSelect={this.handleSelect} />
                 <h3>Highlight</h3>
@@ -178,6 +179,8 @@ export class MapData extends Component {
             <div>
                 <Selected iso={selected || 'total'} />
             </div>
+            </div>
+            <Form52 iso={selected} />
         </div>);
     }
 }

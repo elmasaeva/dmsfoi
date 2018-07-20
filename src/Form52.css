@@ -1,0 +1,53 @@
+.bars .line {
+    display: flex;
+    padding: 2px;
+}
+
+.bars .line div {
+    height: 20px;
+}
+
+.bars .line .wait0 {
+    background-color: #77ee77;
+}
+
+.bars .line .wait1 {
+    background-color: #33aaaa;
+}
+
+.bars .line .wait2 {
+    background-color: #33aaaa;
+}
+
+.bars .line .wait3 {
+    background-color: #ff9999;
+}
+
+.bars .line .wait4 {
+    background-color: #ee5555;
+}
+
+.bars .line .wait {
+    background-color: #ee5555;
+}
+
+.bars .line pre {
+    margin: 0px 7px;
+}
+
+.right {
+    float: right;
+}
+
+.clear {
+    clear: both;
+}
+
+.form52 {
+    width: 80%;
+    margin-left: 10%;
+}
+
+.form52 h2, .form52 h3 {
+    text-align: center;
+}
