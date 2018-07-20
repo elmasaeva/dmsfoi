@@ -129,12 +129,7 @@ const STYLE_DEFAULT = {
 
 export class MapData extends Component {
     state = {
-        selected: null,
         highlight: 'both4',
-    };
-
-    handleSelect = (iso)=> {
-        this.setState({selected: iso});
     };
 
     handleHighlight = (event)=> {
@@ -155,10 +150,11 @@ export class MapData extends Component {
     }
 
     render() {
-        const {selected, highlight} = this.state;
+        const {highlight} = this.state;
+        const {iso='total'} = this.props.match.params;
         return (<div><div className="mapdata">
             <div>
-                <Map selected={selected} highlight={highlight} onSelect={this.handleSelect} />
+                <Map selected={iso} highlight={highlight} />
                 <h3>Highlight</h3>
                 {this.renderHighlight(
                     <div onClick={this.handleHighlight}>
@@ -177,10 +173,10 @@ export class MapData extends Component {
                 )}
             </div>
             <div>
-                <Selected iso={selected || 'total'} />
+                <Selected iso={iso} />
             </div>
             </div>
-            <Form52 iso={selected} />
+            <Form52 iso={iso} />
         </div>);
     }
 }

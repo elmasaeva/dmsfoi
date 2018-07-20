@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import {Link} from 'react-router-dom'
 import {ISOCODES, koatu} from './regions';
 import CI4DATA from './data/CI4_2018_05_all.json';
 import CI5DATA from './data/CI5_2018_05_all.json';
@@ -75,34 +76,23 @@ function highlightCI45(iso, highlightCode, selected) {
 }
 
 class Region extends Component {
-    handleClick = (event)=> {
-        event.stopPropagation();
-        const {iso} = event.target.dataset;
-        this.props.onClick(iso);
-    };
-
     render() {
         const {iso, selected, highlight, ...props} = this.props;
         const region = ISOCODES[iso];
-        return (<path
-            data-iso={iso}
+        return (<Link to={`/${iso}/`}> <path
             title={region.title}
             d={region.shape}
             fill={highlightCI45(iso, highlight, selected)}
-            {...props}
-            onClick={this.handleClick} />);
+            {...props} />
+        </Link>);
     }
 }
 
 export class Map extends Component {
     
-    handleClick = (event)=> {
-        this.props.onSelect(null);
-    };
-
     render() {
         const {selected, highlight} = this.props;
-        return (<svg version="1.1" width="675" height="410" onClick={this.handleClick}>
+        return (<svg version="1.1" width="675" height="410">
             {Object.keys(ISOCODES)
                 .map((iso)=> (<Region key={iso} iso={iso} selected={selected === iso} highlight={highlight} onClick={this.props.onSelect} />))}
         </svg>);
