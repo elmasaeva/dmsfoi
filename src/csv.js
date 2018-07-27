@@ -37,11 +37,31 @@ function process52(input, output) {
     fs.writeFileSync(output, JSON.stringify(data));
 }
 
+function split(lines, lastCol) {
+    const linesize = lines.indexOf(lastCol) + 1;
+    let idx = linesize + linesize;
+    const ret = [];
+    while((idx+1) < lines.length) {
+        ret.push(lines.slice(idx, idx + linesize));
+        idx += linesize;
+    }
+    return ret;
+}
+
+function process52txt(input, output) {
+    const data = fs
+        .readFileSync(input)
+        .toString()
+        .split('\n');
+    fs.writeFileSync(output, JSON.stringify(split(data, 'Примітки')));
+}
+
 function main() {
     process('./src/data/CI5_2018_05_all.csv', './src/data/CI5_2018_05_all.json', packci5);
     process('./src/data/CI4_2018_05_all.csv', './src/data/CI4_2018_05_all.json', packci4);
     process('./src/data/population_2018_05.csv', './src/data/population_2018_05.json', population);
     process52('./src/data/F52_UA51_2017.csv', './src/data/F52_UA51_2017.json');
+    process52txt('./src/data/F52_UA26_2017.txt', './src/data/F52_UA26_2017.json');
 }
 
 main()
